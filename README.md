@@ -3,19 +3,32 @@
 **Node.js, API Integration, HTML/CSS**
 
 ## API
-`https://api-web.nhle.com/v1/`
+```
+https://api-web.nhle.com/v1/
+```
 
 ## Setup
 
 1. Clone repository
-   `git clone https://github.com/Nickeniklas/nhl-stats-app/`
+   ```
+   git clone https://github.com/Nickeniklas/nhl-stats-app/
+   ```
    
 3. Go to project root folder
-   `cd nhl-stats-app`
+   ```
+   cd nhl-stats-app
+   ```
    
 5. Install packages
-   `npm install`
+   ```
+   npm install
+   ```
    
 7. Run server
-   `node server.js`
-   or in Dev mode `npx nodemon server.js`
+   ```
+   node server.js
+   ```
+   or in Dev mode
+   ```
+   npx nodemon server.js
+   ```
