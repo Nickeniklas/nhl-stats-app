@@ -18,4 +18,4 @@
    
 7. Run server
    `node server.js`
-   or in Dev mode `nodemon server.js`
+   or in Dev mode `npx nodemon server.js`
