@@ -12,3 +12,17 @@ body {
     align-items: center;
     justify-content: center;
 }
+.flex-row-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#header {
+    background-color: #0a1d14;
+    height: 4rem;
+    align-items: center;
+    justify-content: space-around;
+}
+#footer{
+    padding-top: 6rem;
+}
