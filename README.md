@@ -1,11 +1,17 @@
 # NHL Stats Web Application
 
-**Node.js, API Integration, HTML/CSS**
+**Node.js, API Integration, Browser Frontend**
 
 ## API
 ```
 https://api-web.nhle.com/v1/
 ```
+
+documentation:
+```
+https://gitlab.com/dword4/nhlapi/-/blob/master/new-api.md?ref_type=heads
+```
+
 
 ## Setup
 
@@ -26,9 +32,9 @@ https://api-web.nhle.com/v1/
    
 7. Run server
    ```
-   node server.js
+   node .\backend\server.js
    ```
    or in Dev mode
    ```
-   npx nodemon server.js
+   npx nodemon .\backend\server.js
    ```
