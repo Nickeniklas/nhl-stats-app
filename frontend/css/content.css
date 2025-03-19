@@ -13,7 +13,7 @@
     justify-content: space-evenly;
 }
 .today-game-cards {
-    background-color: #9E5731  ;
+    background-color: #666666  ;
     color: whitesmoke;
     display: flex;
     flex-direction: column;
@@ -32,16 +32,23 @@
 }
 
 /* Standings */
-#standings-list {
-    background-color: #9E5731;
-    list-style-type: none;
+#standings-table {
+    background-color: #666666;
     padding: 2rem;
     border-radius: 3px;
+    
+    border-collapse: separate; 
+    font-size: 1.2rem;
 }
-#standings-list > li {
-    background-color: #a07862;
+#standings-table tbody {
+    background-color: rgb(65, 58, 53)
+}
+#standings-table th {
     padding: 1rem;
-
+    color: black;
+}
+#standings-table td {
+    padding: 1rem;
 }
 .standings-team-logo {
     width: 2rem;
