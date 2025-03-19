@@ -12,7 +12,7 @@
 <body>
 <!-- Header -->
     <div class="flex-row-container" id="header">
-        <a href="index.html">Refresh</a>
+        <a href="index.html" id="header-refresh">Refresh</a>
         <div id="clock-container">loaded at: time...</div>
     </div>
 
@@ -24,6 +24,12 @@
 
         <div class="content-container">
             <h2 class="content-title">Standings:</h2>
+            <div id="standings-filtering">
+                <p>Filtering options:</p>
+                <button type="button" class="btn btn-light" id="filter-default">Reset</button>
+                <button type="button" class="btn btn-light" id="filter-conference">By Conference</button>
+                <button type="button" class="btn btn-light" id="filter-playoffs">Show Playoff teams</button>
+            </div>
             <div id="standings-content">Content not loaded...</div>
         </div>
     </div>
@@ -34,6 +40,8 @@
           <ul class="nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
             <li class="nav-item"><a href="index.html" class="nav-link px-2 text-white">Refresh</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Schedule</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Standings</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Guide</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
           </ul>
@@ -43,7 +51,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="scripts/clock.js"></script>
-    <script src="scripts/fetchNow.js"></script>
-    <script src="scripts/fetchStandings.js"></script>
+    <script src="scripts/scheduleNow.js"></script>
+    <script src="scripts/standings.js"></script>
 </body>
 </html>

@@ -32,25 +32,50 @@
 }
 
 /* Standings */
-#standings-table {
+#standings-content {
+    display: flex;
+}
+#standings-content h2 {
+    margin: 1rem;
+}
+/*table*/
+.standings-table {
     background-color: #666666;
-    padding: 2rem;
     border-radius: 3px;
-    
     border-collapse: separate; 
     font-size: 1.2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    margin: 0.5rem
 }
-#standings-table tbody {
-    background-color: rgb(65, 58, 53)
+.standings-table tbody {
+    background-color: rgb(65, 58, 53);
+    counter-reset: row-number; /* Reset counter */
 }
-#standings-table th {
+.standings-table tr {
+    counter-increment: row-number;
+}
+tbody tr td:first-child::before {
+    content: counter(row-number) ".";
+}
+.standings-table th {
     padding: 1rem;
     color: black;
 }
-#standings-table td {
+.standings-table td {
     padding: 1rem;
 }
+
 .standings-team-logo {
-    width: 2rem;
-    height: auto;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+/*filtering options*/
+#standings-filtering {
+    border-radius: 3px;
+    background-color: black;
+    padding: 1rem;
 }

@@ -39,7 +39,7 @@ async function showContent() {
         // Filter games for today based on the current date
         const todayGames = allGames.filter(game => {
             const gameDateUTC = new Date(game.startTimeUTC); // Parse the game start time
-            const gameDateEET = new Date(gameDateUTC.setHours(gameDateUTC.getHours() - 2));
+            const gameDateEET = new Date(gameDateUTC.setHours(gameDateUTC.getHours() - 2)); // match UTC with EET
 
             //console.log("Game start time (UTC):", gameDateUTC.toISOString());
             //console.log("Game start time (EET):", gameDateEET);

@@ -1,5 +1,5 @@
 body {
-    background-color: #B2AAAA;
+    background-color: #999191;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -23,11 +23,12 @@ body {
     align-items: center;
     justify-content: space-around;
 }
+#header-refresh {
+    color: whitesmoke;
+}
+
 #footer{
     padding-top: 6rem;
     color: whitesmoke
 }
 
-a {
-    color: whitesmoke;
-}
