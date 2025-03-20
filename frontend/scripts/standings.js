@@ -9,48 +9,49 @@ async function fetchStandings() {
         }
         // fetch succeeded
         const data = await response.json();
-        //console.log("Fetched data:", data);
+        //console.log("Fetched data:", data.standings);
 
-        return data;
+        return data.standings;
     } catch (error) {
         console.error("Error fetching data:", error);
         document.querySelector('#standings-content').innerHTML = "No standings available..."
+        return []; //to avoid errors
     }
     
 }
 
 // function to process the fetched data
-async function handleStandings() {
-    let data = await fetchStandings();
-
-    // Sort teams by points in descending order
-    const sortedStandings = data.standings.sort((a, b) => b.points - a.points);
-
-    const teamsData = []; //empty list for data
-    sortedStandings.forEach(team => {
-        //add data to list
-        teamsData.push({
-            'name' : team.teamCommonName.default,
-            'wins' : team.wins,
-            'losses' : team.losses,
-            'gamesPlayed' : team.gamesPlayed,
-            'totalPoints' : team.points,
-            'logo' : team.teamLogo,
-            'conference' : team.conferenceName,
-            'division' : team.divisionName
-        })
-    });
-
-    return teamsData
+function processStandings(standingsData) {
+    if (!standingsData || standingsData.length === 0) {
+        return []; // Handle empty or invalid input
+    }
+    return standingsData
+        .sort((a, b) => b.points - a.points)
+        .map(team => ({
+            name: team.teamCommonName.default,
+            wins: team.wins,
+            losses: team.losses,
+            gamesPlayed: team.gamesPlayed,
+            totalPoints: team.points,
+            logo: team.teamLogo,
+            conference: team.conferenceName,
+            division: team.divisionName
+        }));
 }
+// function for drawing standins in the html UI
+function displayStandings(primaryTeamData, primaryElementId, secondaryTeamData = null, secondaryElementId = null) {   
+    const standingsContent = document.querySelector('#standings-content');
+    if (!standingsContent) {
+        console.error(`Element with id "${primaryElementId}" not found.`);
+        return; // Important: Exit if target element doesn't exist
+    }
+    if (!primaryTeamData || primaryTeamData.length === 0) {
+        standingsContent.innerHTML = "<p class='no-data-message'>No data to display.</p>";
+        return;
+    }
 
-// function to draw/display standing in html
-async function showStandings() {
-    // draw content inside "#standings-content"
-    const standingsContent = document.querySelector('#standings-content')
-    
-    // Empty content field and create a table
-    standingsContent.innerHTML = `
+    // Start building the table
+    let tableHTML = `
         <table class="standings-table">
             <thead>
                 <tr>
@@ -61,24 +62,44 @@ async function showStandings() {
                     <th>Points</th>
                 </tr>
             </thead>
-            <tbody id="standings-body">
-                <!-- Rows will be added here -->
+            <tbody id="${primaryElementId}">
+                <!-- Primary data comes here -->
             </tbody>
-        </table>
     `;
 
-    // Select the <tbody> element where rows will be appended
-    const standingsBody = document.querySelector('#standings-body');
+    // If a secondary element ID is provided, add a second <tbody>
+    if (secondaryTeamData && secondaryElementId) {
+        tableHTML += `
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>GP</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody id="${secondaryElementId}">
+                <!-- Secondary data comes here -->
+            </tbody>
+        `;
+    }
 
-    // fetched and processed data
-    teamsData = await handleStandings();
-    //console.log(teamsData)
-    
-    // Append rows to the table
-    teamsData.forEach(team => {
-        standingsBody.innerHTML += `
+    tableHTML += `</table>`; // Close the table
+
+    // Set the table HTML
+    standingsContent.innerHTML = tableHTML;
+
+    // Populate the primary table body
+    const primaryBody = document.querySelector(`#${primaryElementId}`);
+    primaryTeamData.forEach(team => {
+        primaryBody.innerHTML += `
             <tr>
-                <td class="team-standings-logo"><img src="${team.logo}" alt="${team.name} logo" class="standings-team-logo">${team.name}</td>
+                <td>
+                    <img src="${team.logo}" alt="${team.name} logo" class="standings-team-logo">
+                    ${team.name}
+                </td>
                 <td>${team.wins}</td>
                 <td>${team.losses}</td>
                 <td>${team.gamesPlayed}</td>
@@ -86,106 +107,63 @@ async function showStandings() {
             </tr>
         `;
     });
+
+    // If a secondary table body is provided, populate it with the same data (or modify as needed)
+    if (secondaryElementId) {
+        const secondaryBody = document.querySelector(`#${secondaryElementId}`);
+        secondaryTeamData.forEach(team => {
+            secondaryBody.innerHTML += `
+                <tr>
+                    <td>
+                        <img src="${team.logo}" alt="${team.name} logo" class="standings-team-logo">
+                        ${team.name}
+                    </td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                    <td>${team.gamesPlayed}</td>
+                    <td>${team.totalPoints}</td>
+                </tr>
+            `;
+        });
+    }
 }
-showStandings()
+
+// MAIN FUNCTION TO FETCH, PROCESS AND DISPLAY
+async function standings() {
+    const standingsData = await fetchStandings();
+    const processedData = processStandings(standingsData);
+    displayStandings(processedData, 'standings-body')
+
+}//executed at the very end of script
 
 // filtering options
-
-//function to filter back to default
-async function resetFilters() {
-    const filterBtn = document.querySelector('#filter-default');
-
-
-}
 // function to filter by conference:
 async function filterByConference() {
-    const standingsContent = document.querySelector('#standings-content');
-
-    // Empty content field and create two tables
-    standingsContent.innerHTML = `
-        <div id="eastern-conference">
-            <h2>Eastern Conference</h2>
-            <table class="conference-table standings-table">
-                <thead>
-                    <tr>
-                        <th>Team</th>
-                        <th>W</th>
-                        <th>L</th>
-                        <th>GP</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-                <tbody id="eastern-body">
-                    <!-- Rows will be added here -->
-                </tbody>
-            </table>
-        </div>
-        <div id="western-conference">
-            <h2>Western Conference</h2>
-            <table class="conference-table standings-table">
-                <thead>
-                    <tr>
-                        <th>Team</th>
-                        <th>W</th>
-                        <th>L</th>
-                        <th>GP</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-                <tbody id="western-body">
-                    <!-- Rows will be added here -->
-                </tbody>
-            </table>
-        </div>
-    `;
-
-    const easternBody = document.querySelector('#eastern-body');
-    const westernBody = document.querySelector('#western-body');
-    const teamsData = await handleStandings();
+    //get data
+    const standingsData = await fetchStandings();
+    const processedData = processStandings(standingsData);
 
     // Separate teams by conference
-    const easternTeams = teamsData.filter(team => team.conference === 'Eastern');
-    const westernTeams = teamsData.filter(team => team.conference === 'Western');
+    const easternTeams = processedData.filter(team => team.conference === 'Eastern');
+    const westernTeams = processedData.filter(team => team.conference === 'Western');
 
-    // Append rows to the Eastern Conference table
-    easternTeams.forEach(team => {
-        easternBody.innerHTML += `
-            <tr>
-            
-                <td class="team-standings-logo"><img src="${team.logo}" alt="${team.name} logo" class="standings-team-logo">${team.name}</td>
-                <td>${team.wins}</td>
-                <td>${team.losses}</td>
-                <td>${team.gamesPlayed}</td>
-                <td>${team.totalPoints}</td>
-            </tr>
-        `;
-    });
+    //target element for table 
+    const standingsContent = document.querySelector('#standings-content');
+    if (!standingsContent) return;
 
-    // Append rows to the Western Conference table
-    westernTeams.forEach(team => {
-        westernBody.innerHTML += `
-            <tr>
-                <td class="team-standings-logo"><img src="${team.logo}" alt="${team.name} logo" class="standings-team-logo">${team.name}</td>
-                <td>${team.wins}</td>
-                <td>${team.losses}</td>
-                <td>${team.gamesPlayed}</td>
-                <td>${team.totalPoints}</td>
-            </tr>
-        `;
-    });
+    // call display function per conference
+    displayStandings(westernTeams, 'western-body', easternTeams, 'eastern-body');
 }
-
-// Event listeners for filtering
-document.querySelector('#filter-default').addEventListener('click', showStandings);
-document.querySelector('#filter-conference').addEventListener('click', filterByConference);
 
 // Get team that are in the playoffs (if they started now) 
 async function determinePlayoffTeams() {
-    const teamsData = await handleStandings();
+    //get data
+    const standings = await fetchStandings();
+    const processedData = processStandings(standings);
 
     // Separate teams by conference
-    const easternTeams = teamsData.filter(team => team.conference === 'Eastern');
-    const westernTeams = teamsData.filter(team => team.conference === 'Western');
+    const easternTeams = processedData.filter(team => team.conference === 'Eastern');
+    const westernTeams = processedData.filter(team => team.conference === 'Western');
 
     // Sort teams by points in descending order
     easternTeams.sort((a, b) => b.totalPoints - a.totalPoints);
@@ -199,11 +177,17 @@ async function determinePlayoffTeams() {
     const playoffTeams = [...easternPlayoffTeams, ...westernPlayoffTeams];
 
     // Highlight playoff teams in the table
-    const rows = document.querySelectorAll('#standings-body tr, #eastern-body tr, #western-body tr');
-    rows.forEach(row => {
-        const teamName = row.querySelector('td:nth-child(1)').textContent; // Get the team name from the second column
-        if (playoffTeams.some(team => team.name === teamName)) {
-            row.style.backgroundColor = '#108552'; // Apply background color
+    const tableBodies = document.querySelectorAll('#standings-body, #eastern-body, #western-body'); //Select ALL table bodies
+    console.log("Selected table bodies:", tableBodies);
+    tableBodies.forEach(tableBody => {
+        if(tableBody){ // make sure the table body exists.
+            const rows = tableBody.querySelectorAll('tr'); // Get rows within each table
+            rows.forEach(row => {
+                const teamName = row.querySelector('td:nth-child(1)').textContent.trim(); // Get the team name from the second column
+                if (playoffTeams.some(team => team.name === teamName)) {
+                    row.style.backgroundColor = '#108552'; // Apply background color
+                }
+            });
         }
     });
 
@@ -248,5 +232,21 @@ function getPlayoffTeams(conferenceTeams) {
     return [...topDivisionTeams, ...wildcardTeams];
 }
 
-// button to show playoff teams
-document.querySelector('#filter-playoffs').addEventListener('click', determinePlayoffTeams)
+// 9. Event Listeners
+document.addEventListener('DOMContentLoaded', () => { // Use DOMContentLoaded
+    standings(); // Initial display
+
+    const filterDefaultBtn = document.querySelector('#filter-default');
+    const filterConferenceBtn = document.querySelector('#filter-conference');
+    const filterPlayoffsBtn = document.querySelector('#filter-playoffs');
+
+    if (filterDefaultBtn) {
+        filterDefaultBtn.addEventListener('click', standings);
+    }
+    if (filterConferenceBtn) {
+        filterConferenceBtn.addEventListener('click', filterByConference);
+    }
+    if (filterPlayoffsBtn) {
+        filterPlayoffsBtn.addEventListener('click', determinePlayoffTeams);
+    }
+});
