@@ -236,9 +236,9 @@ function getPlayoffTeams(conferenceTeams) {
 document.addEventListener('DOMContentLoaded', () => { // Use DOMContentLoaded
     standings(); // Initial display
 
-    const filterDefaultBtn = document.querySelector('#filter-default');
-    const filterConferenceBtn = document.querySelector('#filter-conference');
-    const filterPlayoffsBtn = document.querySelector('#filter-playoffs');
+    const filterDefaultBtn = document.querySelector('#filter-standings-default');
+    const filterConferenceBtn = document.querySelector('#filter-standings-conference');
+    const filterPlayoffsBtn = document.querySelector('#filter-standings-playoffs');
 
     if (filterDefaultBtn) {
         filterDefaultBtn.addEventListener('click', standings);

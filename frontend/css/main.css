@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     color: whitesmoke;
+    font-family: 'Roboto Flex', normal;
 }
 
 .flex-container {
@@ -30,5 +31,15 @@ body {
 #footer{
     padding-top: 6rem;
     color: whitesmoke
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Roboto Flex';
+    src: url('../fonts/RobotoFlex.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Indie Flower';
+    src: url('../fonts/IndieFlower-Regular.ttf') format('truetype');
 }
 

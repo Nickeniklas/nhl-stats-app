@@ -24,7 +24,7 @@
     align-items: center;
 }
 .today-team-titles {
-    
+    white-space: nowrap;
 }
 .schedule-team-logo {
     width: 3rem;
